@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
+
+
+  get 'sessions/login'
+
+  get 'sessions/logout'
+
+  post 'sessions'=> 'sessions#create'
+
   resources :posts
-  get 'posts' => 'post#index', as: 'posts_path'
+  get 'registration'=> 'users#new'#, as: 'registration'
+  post 'users'=> 'users#create'
   get 'pages/index'
 
   root 'posts#index'
