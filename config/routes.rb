@@ -7,7 +7,9 @@ Rails.application.routes.draw do
 
   post 'sessions'=> 'sessions#create'
 
-  resources :posts
+  resources :posts do
+    resources :comments
+  end
   get 'registration'=> 'users#new'#, as: 'registration'
   post 'users'=> 'users#create'
   get 'pages/index'
