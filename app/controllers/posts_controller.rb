@@ -1,15 +1,22 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show, :edit, :update, :destroy]
-
+  before_action :update_views
   # GET /posts
   # GET /posts.json
   def index
     @posts = Post.all
+
+
   end
 
   # GET /posts/1
   # GET /posts/1.json
   def show
+    @post = Post.find(params[:id])
+    respond_to do |format|
+      format.json { render json: @post.to_json }
+      format.html
+    end
   end
 
   # GET /posts/new
@@ -24,7 +31,8 @@ class PostsController < ApplicationController
   # POST /posts
   # POST /posts.json
   def create
-    @post = Post.new(post_params)
+    @post = Post.new(params.require(:post).permit(:title, :body))
+    @post.user = User.first
 
     respond_to do |format|
       if @post.save
@@ -69,6 +77,14 @@ class PostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def post_params
-      params.require(:post).permit(:title, :body)
+      params.require(:post).permit(:title, :body, :image)
+    end
+
+    def update_views
+    cookies[:views] = if cookies[:views].present?
+                        cookies[:views].to_i + 1
+                      else
+                        1
+                      end
     end
 end
